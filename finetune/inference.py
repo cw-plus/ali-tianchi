@@ -7,14 +7,15 @@ import csv
 caffe_root = '/home/wangchao/ali-tianchi/'
 sys.path.append(caffe_root+'python')
  
-
+#导入进度条
+from tqdm import tqdm
 
 import caffe
 #caffe.set_device(0)
 #caffe.set_mode_gpu()
 
 model_def = 'deploy.prototxt'
-model_weights = 'resnet101_solver_adam_iter_20000.caffemodel'
+model_weights = 'resnet101_solver_adam_iter_50000.caffemodel'
 net = caffe.Net(model_def, 'models/'+model_weights, caffe.TEST)
 #net.blobs['data'].reshape(1,3,h,w) # (batch_size,c,h,w)
 net.blobs['data'].reshape(1,3,224,224) # (batch_size,c,h,w)
@@ -50,8 +51,16 @@ label_warp = {'正常': 0,
               }
 submit = ['norm','defect1','defect2','defect3','defect4','defect5','defect6','defect7','defect8','defect9','defect10','defect11']
 
-with open('submit.txt','w') as f:
-  for image_name in image_names:   
+
+
+cnt = 0
+pbar = tqdm(total=440)
+
+
+with open('submit.txt','w') as f: 
+  for image_name in image_names:
+      pbar.update(1)
+      cnt = cnt+1  
       image_name = image_name.strip()
       image = caffe.io.load_image(image_name)# 用的是skimage库，见附录
       # 利用刚刚的设置进行图片预处理
@@ -63,10 +72,12 @@ with open('submit.txt','w') as f:
 
       output_prob= output['prob'][0].argmax()  # 概率最大的label
       #image_name,output_prob)#
-      print (output_prob)      
+      #print (output_prob)      
       f.write(image_name.split("/")[-1]+',' + submit[output_prob]+'\n')
 	  
 os.rename('submit.txt', 'submit.csv')
+
+pbar.close()
 
 '''
 标签对照表
