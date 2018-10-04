@@ -4,7 +4,7 @@ import os
 import sys
 import cv2
 import csv
-caffe_root = '/home/wangchao/ali-tianchi/caffe/'
+caffe_root = '/home/wangchao/ali-tianchi/'
 sys.path.append(caffe_root+'python')
  
 
@@ -14,7 +14,7 @@ import caffe
 #caffe.set_mode_gpu()
 
 model_def = 'deploy.prototxt'
-model_weights = 'senet_solver_adam_iter_10000.caffemodel'
+model_weights = 'resnet101_solver_adam_iter_20000.caffemodel'
 net = caffe.Net(model_def, 'models/'+model_weights, caffe.TEST)
 #net.blobs['data'].reshape(1,3,h,w) # (batch_size,c,h,w)
 net.blobs['data'].reshape(1,3,224,224) # (batch_size,c,h,w)
