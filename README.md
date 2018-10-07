@@ -28,6 +28,63 @@
 
 
 
+使用方法：
+
+在网络的 prototxt 指定：
+
+```
+layer {
+name: "data"
+type: "ImageData"
+top: "data"
+top: "label"
+include {
+  phase: TRAIN
+}
+transform_param {
+    mirror: true
+    contrast_brightness_adjustment: true
+    smooth_filtering: true
+    min_side_min: 256
+    min_side_max: 480
+    crop_size: 224
+    mean_file: "imagenet_mean.binaryproto"
+    min_contrast: 0.8
+    max_contrast: 1.2
+    max_smooth: 6
+    apply_probability: 0.5
+    max_color_shift: 20
+    debug_params: false
+}
+image_data_param {
+  source: "train_list.txt"
+  batch_size: 64
+}
+}
+
+在测试(testing phase)时 :
+
+layer {
+name: "data"
+type: "ImageData"
+top: "data"
+top: "label"
+include {
+  phase: TEST
+}
+transform_param {
+    mirror: false
+    min_side: 256
+    crop_size: 224
+    mean_file: "imagenet_mean.binaryproto"
+}
+image_data_param {
+  source: "test_list.txt"
+  batch_size: 32
+}
+}
+```
+
 
 
 
