@@ -1,5 +1,4 @@
 name: "ResNet_101"
-
 layer {
     name: "data"
     type: "Data"
@@ -8,19 +7,28 @@ layer {
     include {
         phase: TRAIN
     }
+ 
     transform_param {
-        #scale: 0.00390625
-        crop_size: 224
-        mean_value: 104
-        mean_value: 117
-        mean_value: 123
-        mirror: true
-
+       mirror: true
+       crop_size: 224
+       mean_value:104
+       mean_value:117
+       mean_value:123
+       contrast_brightness_adjustment: true
+       smooth_filtering: true
+       min_side_min: 256
+       min_side_max: 480
+       min_contrast:0.8
+       max_contrast:1.2
+       max_smooth:6
+       apply_probability:0.5
+       max_color_shift:20
+       debug_params:false
     }
 
     data_param {
         source: "img_train_lmdb"
-        batch_size: 	2
+        batch_size: 2
         backend: LMDB
     }
 }
@@ -34,6 +42,9 @@ layer {
         phase: TEST
     }
     transform_param {
+        mirror:false
+        min_side: 256
+        crop_size: 224
         mean_value: 104
         mean_value: 117
         mean_value: 123
@@ -4900,10 +4911,10 @@ layer {
         inner_product_param { 
           num_output: 12 
           weight_filler { 
-              type: “xavier” 
+              type: "xavier" 
           } 
           bias_filler { 
-              type: “constant” 
+              type: "constant" 
               value: 0 
           } 
       } 
