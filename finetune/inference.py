@@ -15,7 +15,7 @@ import caffe
 #caffe.set_mode_gpu()
 
 model_def = 'deploy.prototxt'
-model_weights = 'resnet101_solver_adam_iter_50000.caffemodel'
+model_weights = 'resnet101_solver_adam_iter_90000.caffemodel'
 net = caffe.Net(model_def, 'models/'+model_weights, caffe.TEST)
 #net.blobs['data'].reshape(1,3,h,w) # (batch_size,c,h,w)
 net.blobs['data'].reshape(1,3,224,224) # (batch_size,c,h,w)
